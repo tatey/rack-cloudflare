@@ -20,7 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add these middlewares to your stack.
+
+    # config/application.rb
+    config.middleware.insert_before ActionDispatch::RemoteIp, Middleware::CloudFlare::XForwardedFor
+    config.middleware.insert_before ActionDispatch::Static, Middleware::CloudFlare::CacheControl
 
 ## Contributing
 
