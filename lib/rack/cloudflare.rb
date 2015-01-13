@@ -1,4 +1,5 @@
 require "rack/cloudflare/version"
+require "ipaddr"
 
 module Rack
   module Cloudflare
