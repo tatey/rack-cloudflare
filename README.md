@@ -1,6 +1,6 @@
 # Rack::Cloudflare
 
-TODO: Write a gem description
+A collection of middlewares that makes it nicer to work with Cloudflare.
 
 ## Installation
 
