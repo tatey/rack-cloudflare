@@ -7,7 +7,7 @@ A collection of middlewares that makes it nicer to work with Cloudflare.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rack-cloudflare'
+gem 'rack-cloudflare', github: 'tatey/rack-cloudflare'
 ```
 
 And then execute:
