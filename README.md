@@ -24,7 +24,7 @@ Add these middlewares to your stack.
 
     # config/application.rb
     config.middleware.insert_before ActionDispatch::RemoteIp, Rack::Cloudflare::XForwardedFor
-    config.middleware.insert_before ActionDispatch::Static, Rack::Cloudflare::CacheControl
+    config.middleware.insert_before Rack::Lock, Rack::Cloudflare::CacheControl
 
 
 ## Contributing
