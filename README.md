@@ -2,6 +2,8 @@
 
 A collection of middlewares that makes it nicer to work with Cloudflare.
 
+Note that this middleware expects the app to behind another reverse proxy (HAProxy/nginx) with the last IP in `X-Forwarded-For` to be the IP of the client.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -25,6 +27,11 @@ Add these middlewares to your stack.
     # config/application.rb
     config.middleware.insert_before ActionDispatch::RemoteIp, Rack::Cloudflare::XForwardedFor
     config.middleware.insert_before Rack::Lock, Rack::Cloudflare::CacheControl
+
+If you are using Railgun, specify the Railgun source IP by doing:
+
+    # config/application.rb
+    config.middleware.insert_before ActionDispatch::RemoteIp, Rack::Cloudflare::XForwardedFor, additional_ranges: ["<ip of railgun>/32"]
 
 
 ## Contributing
