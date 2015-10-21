@@ -19,36 +19,19 @@ module Rack
     end
 
     class XForwardedFor
-      CLOUDFLARE_IP_RANGES = %w(
-        199.27.128.0/21
-        173.245.48.0/20
-        103.21.244.0/22
-        103.22.200.0/22
-        103.31.4.0/22
-        141.101.64.0/18
-        108.162.192.0/18
-        190.93.240.0/20
-        188.114.96.0/20
-        197.234.240.0/22
-        198.41.128.0/17
-        162.158.0.0/15
-        104.16.0.0/12
-        2400:cb00::/32
-        2606:4700::/32
-        2803:f800::/32
-        2405:b500::/32
-        2405:8100::/32
-      ).map do |range|
-        IPAddr.new(range)
-      end
+      IP_FILE = ::File.expand_path(::File.join(::File.dirname(__FILE__), "cloudflare", "ips.txt"))
+      CLOUDFLARE_IP_RANGES = ::File.readlines(IP_FILE)
 
-      def initialize(app)
+      def initialize(app, options = {})
         @app = app
+        @ip_ranges = (CLOUDFLARE_IP_RANGES + options.fetch(:additional_ranges, [])).map do |range|
+          IPAddr.new(range)
+        end
       end
 
       def call(env)
         fwd = (env['HTTP_X_FORWARDED_FOR'] || '').split(/, /)
-        if env['HTTP_CF_CONNECTING_IP'] && fwd.last && CLOUDFLARE_IP_RANGES.any? { |range| range.include?(fwd.last) }
+        if env['HTTP_CF_CONNECTING_IP'] && fwd.last && @ip_ranges.any? { |range| range.include?(fwd.last) }
           env['HTTP_REMOTE_ADDR_BEFORE_CF'] = env['REMOTE_ADDR']
           env['HTTP_X_FORWARDED_FOR_BEFORE_CF'] = env['HTTP_X_FORWARDED_FOR']
           env['REMOTE_ADDR'] = env['HTTP_CF_CONNECTING_IP']
