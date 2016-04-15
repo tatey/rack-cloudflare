@@ -25,7 +25,7 @@ module Rack
       def initialize(app, options = {})
         @app = app
         @ip_ranges = (CLOUDFLARE_IP_RANGES + options.fetch(:additional_ranges, [])).map do |range|
-          IPAddr.new(range)
+          IPAddr.new(range.strip)
         end
       end
 
